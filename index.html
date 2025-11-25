@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>✨ Avni's Workspace ✨</title>
@@ -10,7 +10,8 @@
     button { padding: 5px 10px; margin: 5px 0; }
     .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
     ul { list-style: none; padding: 0; }
-    li { background: #e7ebf0; margin: 5px 0; padding: 10px; border-radius: 5px; }
+    li { background: #e7ebf0; margin: 5px 0; padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+    li button { margin-left: 10px; }
   </style>
 </head>
 <body>
@@ -46,7 +47,6 @@
       li.textContent = e;
       const del = document.createElement('button');
       del.textContent = 'Delete';
-      del.style.marginLeft = '10px';
       del.onclick = () => { deleteJournal(i); };
       li.appendChild(del);
       list.appendChild(li);
@@ -54,7 +54,7 @@
   }
 
   function addJournal() {
-    const entry = document.getElementById('journal-entry').value;
+    const entry = document.getElementById('journal-entry').value.trim();
     if (!entry) return;
     const entries = JSON.parse(localStorage.getItem('journal')) || [];
     entries.push(entry);
@@ -80,28 +80,27 @@
     let totalScore = 0, totalMax = 0;
     grades.forEach((g, i) => {
       const li = document.createElement('li');
-      li.textContent = `${g.subject} - ${g.assignment}: ${g.score}/${g.total}`;
+      li.innerHTML = `${g.subject} - ${g.assignment}: ${g.score}/${g.total}`;
       const del = document.createElement('button');
       del.textContent = 'Delete';
-      del.style.marginLeft = '10px';
       del.onclick = () => { deleteGrade(i); };
       li.appendChild(del);
       list.appendChild(li);
       totalScore += parseFloat(g.score);
       totalMax += parseFloat(g.total);
     });
-    const avg = totalMax ? ((totalScore/totalMax)*100).toFixed(2) : 0;
+    const avg = totalMax ? ((totalScore / totalMax) * 100).toFixed(2) : 0;
     document.getElementById('average').textContent = `Average: ${avg}%`;
   }
 
   function addGrade() {
-    const subject = document.getElementById('subject').value;
-    const assignment = document.getElementById('assignment').value;
+    const subject = document.getElementById('subject').value.trim();
+    const assignment = document.getElementById('assignment').value.trim();
     const score = parseFloat(document.getElementById('score').value);
     const total = parseFloat(document.getElementById('total').value);
     if (!subject || !assignment || isNaN(score) || isNaN(total)) return;
     const grades = JSON.parse(localStorage.getItem('grades')) || [];
-    grades.push({subject, assignment, score, total});
+    grades.push({ subject, assignment, score, total });
     localStorage.setItem('grades', JSON.stringify(grades));
     document.getElementById('subject').value = '';
     document.getElementById('assignment').value = '';
